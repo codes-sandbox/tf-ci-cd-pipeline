@@ -1,14 +1,25 @@
-# tf-ci-cd-pipeline
+tf-ci-cd-pipeline
+Terraformコードの品質とデプロイの安全性を担保するためのCI/CDパイプライン
 
-Terraform のコード品質を自動担保するための CI/CD パイプライン
+Concept: RAD Approach
+このパイプラインで目指しているのは単なる自動化ではなくインフラを守り抜くための仕組み作り
 
-## CI/CD Status
-[![Terraform Quality Check](https://github.com/codes-sandbox/tf-ci-cd-pipeline/actions/workflows/terraform-validate.yml/badge.svg)](https://github.com/codes-sandbox/tf-ci-cd-pipeline/actions/workflows/terraform-validate.yml)
+Reliability: 手動オペレーションを排除し環境構築を強制
 
-## 概要
-GitHub Actions を使用しpush 時に以下の検証を自動実行
-- `terraform init`: 構成の初期化確認
-- `terraform validate`: 構文の正当性チェック
+Availability: 変更時のリスクを最小化しインフラの状態を常に正しく保持
 
-## 利用方法
-このリポジトリの `.github/workflows/` 配下をコピーすることで他のTerraformリポジトリにも簡単にCI/CDを導入可能
+Defense: 構文チェックや品質検証を自動化フローに組み込み不正な構成変更が本番環境へ反映されるのを防止
+
+CI/CD Status
+何をやっているか
+GitHub Actionsを使いプッシュのタイミングで以下の検証を自動実行
+
+terraform init: 構成の整合性確認
+
+terraform validate: 構文の厳密なチェック
+
+これらを自動化することでローカル環境の差異に起因するデプロイ失敗や初歩的なミスの混入を未然に排除
+
+実践での活用
+このリポジトリの .github/workflows/ をコピーすれば他のTerraformプロジェクトにも即座に導入可能
+インフラ構築を属人化させずコードベースで安全に管理するためのテンプレートとして運用中
