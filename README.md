@@ -1,25 +1,41 @@
-tf-ci-cd-pipeline
+## tf-ci-cd-pipeline
 Terraformコードの品質とデプロイの安全性を担保するためのCI/CDパイプライン
 
-Concept: RAD Approach
+## Concept: RAD Approach
 このパイプラインで目指しているのは単なる自動化ではなくインフラを守り抜くための仕組み作り
 
-Reliability: 手動オペレーションを排除し環境構築を強制
+### Reliability
+手動オペレーションを排除し環境構築を強制
 
-Availability: 変更時のリスクを最小化しインフラの状態を常に正しく保持
+### Availability
+変更時のリスクを最小化しインフラの状態を常に正しく保持
 
-Defense: 構文チェックや品質検証を自動化フローに組み込み不正な構成変更が本番環境へ反映されるのを防止
+### Defense
+構文チェックや品質検証を自動化フローに組み込み不正な構成変更が本番環境へ反映されるのを防止
 
-CI/CD Status
-何をやっているか
-GitHub Actionsを使いプッシュのタイミングで以下の検証を自動実行
+## CI/CD Status
+### GitHub Actionsを使いプッシュのタイミングで以下の検証を自動実行
 
-terraform init: 構成の整合性確認
+#### terraform init: 構成の整合性確認
 
-terraform validate: 構文の厳密なチェック
+#### terraform validate: 構文の厳密なチェック
 
 これらを自動化することでローカル環境の差異に起因するデプロイ失敗や初歩的なミスの混入を未然に排除
 
-実践での活用
+## 実践での活用
 このリポジトリの .github/workflows/ をコピーすれば他のTerraformプロジェクトにも即座に導入可能
 インフラ構築を属人化させずコードベースで安全に管理するためのテンプレートとして運用中
+
+## Architecture Overview
+コードの変更（Push）を検知し、自動的に検証を行うことで、ヒューマンエラーを排除しインフラの安定稼働を実現する
+
+```mermaid
+graph LR
+    Push[Git Push] --> Actions[GitHub Actions]
+    subgraph Validation
+        Actions --> Init[terraform init]
+        Init --> Validate[terraform validate]
+        Validate --> Plan[terraform plan]
+    end
+    Plan --> Pass((Success))
+    Plan -- Error --> Fail((Failed/Notify))
